@@ -1,0 +1,42 @@
+
+version: latest
+docker:
+  registry: cyneruxyz/storage
+  username: "{ Fill this in }"
+  password: "{ Fill this in }"
+
+rbac:
+  enable: true
+
+#### Values that will be populated from env values
+env: "minikube"
+zone: "local"
+
+image:
+  pullPolicy: IfNotPresent
+
+
+db:
+  username: postgres
+  server: "{{ include \"chart.fullname\" . }}-postgres.{{ .Release.Namespace }}"
+  password: postgres
+
+postgres:
+  name: postgres
+  image: postgres
+  version: "10.5"
+  imagePullPolicy: IfNotPresent
+  port: "5432"
+
+
+app:
+  namespace: "storage-{{ .Values.env }}"
+  httpPort: 8080
+  grpcPort: 9090
+
+internal:
+  enable: false
+  port: 8081
+
+secrets:
+  enabled: true
